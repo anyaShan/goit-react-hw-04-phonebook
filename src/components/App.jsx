@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocalStorage } from 'components/Hooks/useLocalStorage';
 import { nanoid } from 'nanoid';
 import { Container } from 'components/App.styled';
 import { Section } from 'components/Section/Section';
@@ -6,22 +7,32 @@ import { ContactForm } from 'components/ContactForm/ContactForm';
 import { Filter } from 'components/Filter/Filter';
 import { ContactList } from 'components/ContactList/ContactList';
 
+const INITIAL_CONTACTS = [
+  { id: nanoid(), name: 'Rosie Simpson', number: '459-12-56' },
+  { id: nanoid(), name: 'Hermione Kline', number: '443-89-12' },
+  { id: nanoid(), name: 'Eden Clements', number: '645-17-79' },
+  { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
+];
+
 export function App() {
-  const [contacts, setContacts] = useState(() => {
-    return (
-      JSON.parse(window.localStorage.getItem('contacts')) ?? [
-        { id: nanoid(), name: 'Rosie Simpson', number: '459-12-56' },
-        { id: nanoid(), name: 'Hermione Kline', number: '443-89-12' },
-        { id: nanoid(), name: 'Eden Clements', number: '645-17-79' },
-        { id: nanoid(), name: 'Annie Copeland', number: '227-91-26' },
-      ]
-    );
-  });
+  // ======= заміна на useLocalStorage
+
+  // const [contacts, setContacts] = useState(() => {
+  //   return (
+  //     JSON.parse(window.localStorage.getItem('contacts')) ?? INITIAL_CONTACTS
+  //   );
+  // });
+  // ==================================
+
+  const [contacts, setContacts] = useLocalStorage('contacts', INITIAL_CONTACTS);
   const [filter, setFilter] = useState('');
 
-  useEffect(() => {
-    window.localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  // ======= заміна на useLocalStorage
+
+  // useEffect(() => {
+  //   window.localStorage.setItem('contacts', JSON.stringify(contacts));
+  // }, [contacts]);
+  // ==================================
 
   const formAddContact = data => {
     const { name, number } = data;
